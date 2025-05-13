@@ -1,8 +1,14 @@
 # Observability stack
 
-This repository contains examples of using observability tools, the code required to set up the environment, and the commands needed to configure the entire stack.
+This repository contains examples of using observability tools, the code required to set up the environment and the commands needed to configure the entire stack.
 
-## Usage
+## Examples
+
+- [Kubernetes monitoring](kubernetes-monitoring/)
+- [Grafana Dashboard](grafana-dashboard/)
+- [Prometheus Metrics](prometheus-metrics)
+- [Loki Logs](loki-logs/)
+- [Open Telemetry](open-telemetry)
 
 ## Links
 
