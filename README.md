@@ -6,9 +6,9 @@ This repository contains examples of using observability tools, the code require
 
 - [Kubernetes monitoring](kubernetes-monitoring/)
 - [Grafana Dashboard](grafana-dashboard/)
-- [Prometheus Metrics](prometheus-metrics)
+- [Prometheus Metrics](prometheus-metrics/)
 - [Loki Logs](loki-logs/)
-- [Open Telemetry](open-telemetry)
+- [Open Telemetry](open-telemetry/)
 
 ## Links
 
