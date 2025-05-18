@@ -116,6 +116,14 @@ alloy-singleton:
 alloy-logs:
   enabled: true
   alloy:
+    extraVolumes:
+      - name: journal
+        emptyDir: {}
+    extraVolumeMounts:
+      - name: journal
+        mountPath: /var/log/journal
+    securityContext:
+      privileged: true
     extraEnv:
       - name: GCLOUD_RW_API_KEY
         valueFrom:
