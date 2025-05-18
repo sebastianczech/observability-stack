@@ -1,0 +1,44 @@
+version: '3'
+
+tasks:
+  docker-clean:
+    cmds:
+      - docker image prune --all --force
+      - docker system prune --all --force
+
+  cluster-create:
+    cmds:
+      - kind create cluster --config multi-node-k8s.yaml --name home-lab
+    dir: kubernetes-monitoring
+
+  cluster-status:
+    cmds:
+      - kind get clusters
+      - kubectl get nodes -o wide
+    dir: kubernetes-monitoring
+
+  cluster-delete:
+    cmds:
+      - kind delete cluster --name home-lab
+    dir: kubernetes-monitoring
+
+  grafana-deploy:
+    cmds:
+      - |
+        source .env
+        if [ -z "$GRAFANA_CLOUD_API_KEY" ]; then
+          echo "❌ Error: GRAFANA_CLOUD_API_KEY environment variable is not set"
+          exit 1
+        fi
+        helm repo add grafana https://grafana.github.io/helm-charts &&
+        helm repo update &&
+        helm upgrade --install --version ^2 --atomic --timeout 300s grafana-k8s-monitoring grafana/k8s-monitoring \
+          --namespace "default" --create-namespace --set-string "destinations[0].auth.password=${GRAFANA_CLOUD_API_KEY}" \
+          --set-string "destinations[1].auth.password=${GRAFANA_CLOUD_API_KEY}" \
+          --set-string "destinations[2].auth.password=${GRAFANA_CLOUD_API_KEY}" \
+          --set-string "alloy-metrics.remoteConfig.auth.password=${GRAFANA_CLOUD_API_KEY}" \
+          --set-string "alloy-singleton.remoteConfig.auth.password=${GRAFANA_CLOUD_API_KEY}" \
+          --set-string "alloy-logs.remoteConfig.auth.password=${GRAFANA_CLOUD_API_KEY}" \
+          --set-string "alloy-receiver.remoteConfig.auth.password=${GRAFANA_CLOUD_API_KEY}" \
+          --values grafana.yaml
+    dir: kubernetes-monitoring
