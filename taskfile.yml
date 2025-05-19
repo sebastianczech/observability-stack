@@ -22,6 +22,16 @@ tasks:
       - kind delete cluster --name home-lab
     dir: kubernetes-monitoring
 
+  cluster-debug:
+    cmds:
+      - docker exec -it home-lab-control-plane bash
+    dir: kubernetes-monitoring
+
+  cluster-export-logs:
+    cmds:
+      - kind export logs --name home-lab kind-logs
+    dir: kubernetes-monitoring
+
   grafana-deploy:
     cmds:
       - |
@@ -41,4 +51,13 @@ tasks:
           --set-string "alloy-logs.remoteConfig.auth.password=${GRAFANA_CLOUD_API_KEY}" \
           --set-string "alloy-receiver.remoteConfig.auth.password=${GRAFANA_CLOUD_API_KEY}" \
           --values grafana.yaml
+    dir: kubernetes-monitoring
+
+  grafana-uninstall:
+    cmds:
+      - helm uninstall grafana-k8s-monitoring --namespace default || true
+      - helm uninstall grafana-k8s-monitoring-alloy-logs --namespace default || true
+      - helm uninstall grafana-k8s-monitoring-alloy-metrics --namespace default || true
+      - helm uninstall grafana-k8s-monitoring-alloy-singleton --namespace default || true
+      - helm uninstall grafana-k8s-monitoring-alloy-receiver --namespace default || true
     dir: kubernetes-monitoring
